@@ -14,7 +14,7 @@ class PingPong extends JPanel implements ActionListener
     int leftx,lefty,rightx,righty; // these variables are used to store the x and y coordinates of the paddles
 
     Timer time; //used to create a timer object
-    int delay=100; //used to store the delay for the timer
+    int delay=200; //used to store the delay for the timer
 
     boolean inGame; //used to check if the game is in progress
 
@@ -249,13 +249,24 @@ class PingPong extends JPanel implements ActionListener
             g.drawLine(550, 0, 550, 600);
 
             g.setColor(Color.red);
-            g.fillOval(ballx, bally, 10, 10);
+            g.fillOval(ballx, bally, 15, 15); // ball color
 
             g.setColor(Color.yellow);
             g.fillRect(leftx, lefty, 10, 100);
 
             g.setColor(Color.magenta);
             g.fillRect(rightx, righty, 10, 100);
+
+            if (ballright && ballup) {
+                g.setColor(Color.RED); // Change color when moving right and up
+                g.fillOval(ballx, bally, 15, 15);
+            } else if (ballleft && balldown) {
+                g.setColor(Color.BLUE); // Change color when moving left and down
+                g.fillOval(ballx, bally, 15, 15);
+            } else {
+                g.setColor(Color.WHITE); // Default color
+                g.fillOval(ballx, bally, 15, 15);
+            }
 
         }
         else
@@ -400,8 +411,6 @@ class Frame extends JFrame implements ActionListener,MouseListener
         setLocationRelativeTo(null);
         setResizable(false);
         pack();
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 
