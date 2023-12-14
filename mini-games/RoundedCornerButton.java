@@ -6,8 +6,8 @@ import java.awt.geom.RoundRectangle2D;
 
 public class RoundedCornerButton extends JButton {
 
-    private static final int ARC_WIDTH = 15;
-    private static final int ARC_HEIGHT = 15;
+    private static final int ARC_WIDTH = 20;
+    private static final int ARC_HEIGHT = 20;
 
     public RoundedCornerButton(String label) {
         super(label);
@@ -15,7 +15,7 @@ public class RoundedCornerButton extends JButton {
         setFocusPainted(false); // Remove focus border
         setForeground(Color.WHITE); // Set text color
         setFont(new Font("Arial", Font.BOLD, 14)); // Set font and size
-        setPreferredSize(new Dimension(300, 40)); // Set preferred size
+        setPreferredSize(new Dimension(200, 30)); // Set preferred size
     }
 
     @Override

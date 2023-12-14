@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.swing.*;
 
 public class SnakeGame extends JPanel implements ActionListener, KeyListener {
+    private Image backgroundImage;
     private class Tile {
         int x;
         int y;
@@ -56,10 +57,13 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         //game timer
         gameLoop = new Timer(200, this);
         gameLoop.start();
+
+        backgroundImage = new ImageIcon("backround.jpg").getImage();
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         draw(g);
     }
 
@@ -70,7 +74,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         g.fillOval(food.x * tileSize + tileSize / 4, food.y * tileSize + tileSize / 4, foodSize, foodSize);
 
         // Snake Head
-        g.setColor(new Color(229, 4, 4, 255)); // Set the outline color to green
+        g.setColor(new Color(255, 127, 0, 255)); // Set the outline color to green
         g.fillRect(snakeHead.x * tileSize, snakeHead.y * tileSize, tileSize, tileSize); // Draw a filled square at the head's position
 
         // Snake Body
@@ -135,23 +139,38 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
             placeFood();
         }
 
-
         //move snake body
-        for (int i = snakeBody.size()-1; i >= 0; i--) {
+        for (int i = snakeBody.size() - 1; i >= 0; i--) {
             Tile snakePart = snakeBody.get(i);
             if (i == 0) { //right before the head
                 snakePart.x = snakeHead.x;
                 snakePart.y = snakeHead.y;
-            }
-            else {
-                Tile prevSnakePart = snakeBody.get(i-1);
+            } else {
+                Tile prevSnakePart = snakeBody.get(i - 1);
                 snakePart.x = prevSnakePart.x;
                 snakePart.y = prevSnakePart.y;
             }
         }
+
         //move snake head
-        snakeHead.x += velocityX;
-        snakeHead.y += velocityY;
+        int newHeadX = snakeHead.x + velocityX;
+        int newHeadY = snakeHead.y + velocityY;
+
+        // Wrap snake around the frame
+        if (newHeadX < 0) {
+            newHeadX = boardWidth / tileSize - 1; // Move to the right edge
+        } else if (newHeadX >= boardWidth / tileSize) {
+            newHeadX = 0; // Move to the left edge
+        }
+
+        if (newHeadY < 0) {
+            newHeadY = boardHeight / tileSize - 1; // Move to the bottom edge
+        } else if (newHeadY >= boardHeight / tileSize) {
+            newHeadY = 0; // Move to the top edge
+        }
+
+        snakeHead.x = newHeadX;
+        snakeHead.y = newHeadY;
 
         //game over conditions
         for (int i = 0; i < snakeBody.size(); i++) {
@@ -163,13 +182,8 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
             }
         }
 
-        if (snakeHead.x*tileSize < 0 || snakeHead.x*tileSize > boardWidth || //passed left border or right border
-                snakeHead.y*tileSize < 0 || snakeHead.y*tileSize > boardHeight ) { //passed top border or bottom border
-            gameOver = true;
-        }
         return foodColor;
     }
-
     public boolean collision(Tile tile1, Tile tile2) {
         return tile1.x == tile2.x && tile1.y == tile2.y;
     }
